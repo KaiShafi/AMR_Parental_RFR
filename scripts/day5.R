@@ -85,4 +85,10 @@ select(gapminder, ends_with("p"))
 # 8. pick col using contains func
 
 select(gapminder, contains("c"))
+
 #Filter
+head(gapminder)
+
+#equality
+
+filter(gapminder, "country == Bangladesh")
