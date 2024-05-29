@@ -23,3 +23,20 @@ sum(is.nan(test2))
 is.infinite(test2)
 sum(is.infinite(test2))
 
+#Any function
+any(is.na(test2))
+
+#starwars
+
+starwars
+names(starwars)
+#Check missing
+any(is.na(starwars))
+
+#Count NA/missing values
+
+starwars |> 
+  count(sex)
+
+#pct_complete
+startwars
