@@ -128,3 +128,7 @@ starwars_3 <- starwars |>
   mutate(gender = replace_na("masculine"))
 
 miss_var_summary(starwars_3)
+
+#reading diet data
+
+readxl::read_excel("PH/raw_data/")
