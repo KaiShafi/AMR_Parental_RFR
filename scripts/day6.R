@@ -2,6 +2,7 @@
 library(tidyverse)
 library(skimr)
 library(naniar)
+library(stringr)
 
 #Finding missing values
 
@@ -131,4 +132,57 @@ miss_var_summary(starwars_3)
 
 #reading diet data
 
-readxl::read_excel("PH/raw_data/")
+diet_data <- readxl::read_excel("C:/Users/KAISER/Desktop/Chiral/PH/AMR_Parental_RFR/raw_data/cleaning_diet_data.xlsx")
+
+diet_data |> 
+  count(Treatment)
+
+diet_data |> 
+  mutate(Treatment = case_when(
+    Treatment == "O" ~ "Other",
+    Treatment == "Other" ~ "Other",
+    Treatment == "Ginger" ~ "Ginger",
+    Treatment == "mint" ~"Peppermint",
+    Treatment == "Mint" ~"Peppermint",
+    Treatment == "peppermint" ~"Peppermint"
+  )) |> 
+  count(Treatment,Treatment)
+
+#More efficient
+
+diet_data |> 
+  mutate(Treatment = case_when(
+    Treatment == "Ginger" ~ "Ginger",
+    Treatment %in% c("mint","Mint","peppermint","Peppermint")~"Peppermint",
+    Treatment %in% c("O","Other") ~ "Other"
+  )) |> 
+  count(Treatment)
+
+data_diet <- diet_data |> 
+  mutate(Effect = case_when(
+    Weight_change > 0  ~ "Increase",
+    Weight_change < 0  ~ "Decrease",
+    Weight_change == 0  ~ "Same"
+  ))
+head(data_diet)
+
+
+#str_detect
+data_diet |> 
+  filter(str_detect(string =Effect,pattern="D"))
+
+data_diet |> 
+  filter(str_detect(string =Effect,pattern="I"))
+
+data_diet |> 
+  filter(str_detect(string =Effect,pattern="S"))
+
+
+#Detect and Replace
+
+data_diet |> 
+  mutate(Treatment_Recod = case_when(
+    str_detect(string = Treatment , pattern = "int")~ "Peppermint",
+    str_detect(string =Treatment,pattern ="o^O^")~ "Other",
+    TRUE ~ Treatment
+  ))
